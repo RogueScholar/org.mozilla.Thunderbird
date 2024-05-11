@@ -3,81 +3,73 @@
 org.mozilla.Thunderbird (aka net.thunderbird.Thunderbird)
 
 [Thunderbird](https://www.thunderbird.net/) for [Flatpak](https://flatpak.org/)
-installation instructions are available by
-[clicking here to visit the Thunderbird app page on Flathub](https://flathub.org/apps/details/org.mozilla.Thunderbird).
+installation instructions are available on the
+[Thunderbird app listing at Flathub](https://flathub.org/apps/details/org.mozilla.Thunderbird).
 
-## Known issues:
+## Known issues
 
-#### Old profile
+Non-Flatpak packaging issues should be
+[reported upstream](https://bugzilla.mozilla.org/describecomponents.cgi?product=Thunderbird).
 
-To use an old, non-[Flatpak](https://flatpak.org/)
-[Thunderbird profile](https://support.mozilla.org/kb/profiles-where-thunderbird-stores-user-data)
-copy it from<br> `~/.thunderbird`<br> to<br>
-`~/.var/app/org.mozilla.Thunderbird/.thunderbird`
+### Migration from pre-exisiting non-Flatpak installations
 
-In case Thunderbird opens a new profile instead of the old one, run:<br>
-`flatpak run org.mozilla.Thunderbird -P`<br> then select the old profile and
-tick "_Use the selected profile without asking on startup_" box.
+In order to migrate your profile from an existing non-Flatpak installation and
+preserve all settings, please copy or move the entire **`~/.thunderbird`**
+directory into **`~/.var/app/org.mozilla.Thunderbird/.thunderbird`**.
 
-#### Language support
+In case Thunderbird opens a new profile instead of the existing one, use the
+terminal to execute `flatpak run org.mozilla.Thunderbird -P`, then select the
+right profile and confirm that **"Use the selected profile without asking on
+startup"** is checked.
 
-([#3](https://github.com/flathub/org.mozilla.Thunderbird/issues/3)) All
-supported locales are available in `org.mozilla.Thunderbird.Locale` extension.
-One locale that matches host OS locale will be installed and selected by
-default. For instructions about how to enable more locales in flatpak take a
-look at
-https://flatpak.readthedocs.io/en/latest/flatpak-command-reference.html#flatpak-config
+### Language support
 
-([#90](https://github.com/flathub/org.mozilla.Thunderbird/issues/90))
-Dictionaries availabiity is similar as for locales. They also could be
-downloaded manually from:<br> https://addons.thunderbird.net/language-tools/<br>
-and installed through:<br>
-[Menu Bar](https://support.mozilla.org/kb/display-thunderbird-menus-and-toolbar) >
-`Tools` > `Add-ons` > `Extensions` > `Install Add-on From File`<br> You may need
-to restart app in order to make changes effective.
+- [&lsqb;#3&rsqb;](https://github.com/flathub/org.mozilla.Thunderbird/issues/3)
+  All supported locales are available from the `org.mozilla.Thunderbird.Locale`
+  Flatpak extension. One locale that matches the host OS locale will be
+  installed and selected by default. For instructions on how to enable more
+  locales for your Flatpaks, visit the
+  [Flatpak configuration](https://flatpak.readthedocs.io/en/latest/flatpak-command-reference.html#flatpak-config)
+  documentation.
 
-([#88](https://github.com/flathub/org.mozilla.Thunderbird/issues/88)) Note that
-Calendar extension is not localized and available only in _English (US)_. For
-localized version you may remove bundled extension and install localized one
-from:<br> https://addons.thunderbird.net/thunderbird/addon/lightning/
+- [&lsqb;#90&rsqb;](https://github.com/flathub/org.mozilla.Thunderbird/issues/90)
+  Dictionary availability is much the same, however they can also be downloaded
+  manually from
+  [Thunderbird.net](https://addons.thunderbird.net/language-tools/) and
+  installed from the
+  [Menu Bar](https://support.mozilla.org/kb/display-thunderbird-menus-and-toolbar)
+  > `Tools` > `Add-ons` > `Extensions` > `Install Add-on From File`. You will
+  need to restart the app in order to finalize the installation.
 
-#### New mail notifications
+### New mail notifications
 
-([#11](https://github.com/flathub/org.mozilla.Thunderbird/issues/11#issuecomment-531987872))
-To enable new mail notifications:<br>
+- [&lsqb;#11&rsqb;](https://github.com/flathub/org.mozilla.Thunderbird/issues/11#issuecomment-531987872)
+  To enable new mail notifications:
+  1. [Menu Bar](https://support.mozilla.org/kb/display-thunderbird-menus-and-toolbar)
+     > `Edit` > `Preferences` > `Advanced` > `General` > `Config Editor…`, and
+     set **`mail.biff.use_system_alert`** to **`true`** (default), or
+  1. [Menu Bar](https://support.mozilla.org/kb/display-thunderbird-menus-and-toolbar)
+     > `Edit` > `Preferences` > `General` > `Customize…` at "Show an alert" and
+     set "Show New Mail alert for:".
+- [&lsqb;#79&rsqb;](https://github.com/flathub/org.mozilla.Thunderbird/issues/79#issuecomment-534298255)
+  Alternatively, you may set **`mail.biff.use_system_alert`** to **`false`**,
+  which will make notifications non-native, but clicking on them will open the
+  mail item in Thunderbird.
 
-1. [Menu Bar](https://support.mozilla.org/kb/display-thunderbird-menus-and-toolbar) >
-   `Edit` > `Preferences` > `Advanced` > `General` > `Config Editor…`, set
-   `mail.biff.use_system_alert` to `true` (default)<br>
-1. [Menu Bar](https://support.mozilla.org/kb/display-thunderbird-menus-and-toolbar) >
-   `Edit` > `Preferences` > `General` > Select `Customize…` for "Show an alert"
-   and set "Show New Mail alert for:"
+### Wayland
 
-([#79](https://github.com/flathub/org.mozilla.Thunderbird/issues/79#issuecomment-534298255))
-Alternatively you may set `mail.biff.use_system_alert` to `false` which will
-make notifications non-native but clicking on them will open mail in
-Thunderbird.
+- [&lsqb;#75&rsqb;](https://github.com/flathub/org.mozilla.Thunderbird/issues/75)
+  To enable the experimental [Wayland](https://wayland.freedesktop.org/)
+  compositor backend (assuming the desktop session is also Wayland), execute:
+  `flatpak override --user --env=MOZ_ENABLE_WAYLAND=1 org.mozilla.Thunderbird`.
 
-#### GPG extension support
+### Smartcard
 
-([#4](https://github.com/flathub/org.mozilla.Thunderbird/issues/4)) To use
-[GPG](https://gnupg.org/) extensions like the
-[Enigmail add-on](https://addons.thunderbird.net/addon/enigmail/) set (may
-require `sudo`):<br>
-`flatpak override --filesystem=~/.gnupg org.mozilla.Thunderbird`<br>
-`flatpak override --filesystem=xdg-run/gnupg:ro org.mozilla.Thunderbird`<br>
+- [&lsqb;#51&rsqb;](https://github.com/flathub/org.mozilla.Thunderbird/issues/51)
+  For SmartCard support, you need to be running Flatpak v1.3.2 or newer.
 
-Additionally if gpg keys are protected by PIN:<br>
-`flatpak override --talk-name=org.gnome.keyring.SystemPrompter org.mozilla.Thunderbird`
+## Other Flatpak issues unresolved yet by upstream
 
-#### Wayland
-
-([#75](https://github.com/flathub/org.mozilla.Thunderbird/issues/75)) To enable
-the experimental [Wayland](https://wayland.freedesktop.org/) backend (assuming
-the desktop session runs under a Wayland) set (may require `sudo`)<br>
-`flatpak override --env=MOZ_ENABLE_WAYLAND=1 org.mozilla.Thunderbird`
-
-#### Smartcard
-
-([#51](https://github.com/flathub/org.mozilla.Thunderbird/issues/51)) For
-Smartcard support you need at least Flatpak 1.3.2.
+- [&lsqb;#123&rsqb;](https://github.com/flathub/org.mozilla.Thunderbird/issues/123)
+  Opening the Profile Directory doesn't work
+  ([upstream bug report](https://bugzilla.mozilla.org/show_bug.cgi?id=1625111)).

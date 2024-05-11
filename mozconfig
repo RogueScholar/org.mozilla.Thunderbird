@@ -1,27 +1,24 @@
 # General configuration options
 ac_add_options --prefix=/app
+ac_add_options --enable-release
+ac_add_options --enable-official-branding
+# FIXME: Build/use wasi sysroot instead of disabling wasm libs sandbox
+ac_add_options --without-wasm-sandboxed-libraries
+export MOZ_NOSPAM=1
 
 # build thunderbird
 mk_add_options MOZ_CO_PROJECT=mail
 ac_add_options --enable-application=comm/mail
-ac_add_options --enable-official-branding
-
-# build lightning extension
-# it's not possible to localize it easily but Add-on store version is broken
-# https://github.com/flathub/org.mozilla.Thunderbird/issues/86
-ac_add_options --enable-calendar
-
-# Use gtk3
-ac_add_options --enable-default-toolkit=cairo-gtk3
 
 # use system libs if possible
 ac_add_options --with-system-jpeg
 ac_add_options --with-system-zlib
-#error: no member named 'frame_flags' in 'vpx_svc_ref_frame_config'
-#ac_add_options --with-system-libvpx
-ac_add_options --with-system-bz2
-ac_add_options --with-system-icu
-# https://bugzilla.mozilla.org/show_bug.cgi?id=1465613
+ac_add_options --with-system-libvpx
+# freedesktop runtime is missing bzip2.pc file
+#ac_add_options --with-system-bz2
+# requires icu-i18n >= 69.1
+#ac_add_options --with-system-icu
+# requires nss >=3.53.1
 #ac_add_options --with-system-nss
 #ac_add_options --with-system-nspr
 ac_add_options --with-system-png
@@ -30,8 +27,17 @@ ac_add_options --with-system-png
 ac_add_options --enable-system-ffi
 ac_add_options --enable-system-pixman
 
-# use optimizations
+# build optimizations
 ac_add_options --enable-optimize
+# causes build failures:
+# /usr/bin/ld: error: LLVM gold plugin has failed to create LTO module: Unknown attribute kind (62) (Producer: 'LLVM10.0.1-rust-1.45.0-stable' Reader: 'LLVM 8.0.1'
+#ac_add_options --enable-lto
+
+# elfhack may cause issues when building with lld
+# https://bugzilla.mozilla.org/show_bug.cgi?id=1482204
+# https://bugzilla.mozilla.org/show_bug.cgi?id=1483822
+# It also fails the build when using gcc
+#ac_add_options --disable-elf-hack
 
 # Retain debug symbols
 ac_add_options --disable-strip
@@ -43,8 +49,6 @@ ac_add_options --disable-crashreporter
 ac_add_options --disable-tests
 ac_add_options --disable-necko-wifi
 ac_add_options --disable-updater
-ac_add_options --disable-gconf
-ac_add_options --disable-startup-notification
 
 # Needed to enable breakpad in application.ini
 export MOZILLA_OFFICIAL=1
